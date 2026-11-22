@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mis Horas · Ana Paola</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b0618">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mis Horas">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: tranquila, nocturna, cercana
+   IDEA: un diario de horas bajo un cielo de noche
+   PICTURE: el anillo brillante con lo ganado hoy
+   COLOUR and TYPE: noche violeta, rosa y lavanda; Cormorant + DM Sans
+   LAYOUT: columna de móvil, menú inferior de cristal */
+:root{color-scheme:dark;--bg:#0b0618;--ink:#f6f0ff;--soft:#c9b8e8;--mut:#9d8bc2;--pink:#f472b6;--pink2:#f9a8d4;--vio:#a855f7;--lav:#c084fc;--line:rgba(216,180,254,.22);--glass:rgba(255,255,255,.055);--ok:#5eead4;--warn:#fcd34d}
+*{box-sizing:border-box;min-width:0;margin:0;padding:0}
+html{background:var(--bg)}
+body{font:16px/1.5 'DM Sans',system-ui,sans-serif;color:var(--ink);min-height:100vh;overflow-x:clip;
+ background:radial-gradient(110% 55% at 85% -5%,#3b1a6e 0%,#1a0d3a 45%,var(--bg) 80%) fixed}
+.app{max-width:480px;margin:0 auto;padding:0 16px 120px;position:relative}
+.stars{position:absolute;inset:0 0 auto 0;height:300px;pointer-events:none}
+.stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;box-shadow:0 0 6px #fff;opacity:.6}
+header{display:flex;justify-content:space-between;align-items:center;padding:22px 4px 8px;position:relative}
+.brand b{display:block;font:600 24px/1 'Cormorant Garamond',serif;letter-spacing:.22em}
+.brand small{font-size:11px;letter-spacing:.3em;color:var(--soft)}
+.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:14px;background:linear-gradient(135deg,var(--pink),var(--vio));box-shadow:0 0 18px rgba(244,114,182,.55)}
+.note{font-size:13px;color:var(--warn);background:rgba(252,211,77,.08);border:1px solid rgba(252,211,77,.25);border-radius:14px;padding:8px 12px;margin:6px 0}
+.hero{position:relative;padding:16px 4px 6px;min-height:150px}
+.orb{position:absolute;right:-40px;top:-30px;width:190px;height:190px;border-radius:50%;pointer-events:none;
+ background:radial-gradient(circle at 35% 35%,#ffe3f3 0%,#f9a8d4 18%,#c084fc 45%,#6d28d9 74%,transparent 75%);
+ box-shadow:0 0 60px 8px rgba(192,132,252,.5),0 0 120px 24px rgba(244,114,182,.2);opacity:.85}
+.hero h1{font:500 34px/1.05 'Cormorant Garamond',serif;position:relative;max-width:230px;text-wrap:balance}
+.hero p{color:var(--soft);font-size:14px;margin-top:8px;position:relative;max-width:220px}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:24px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 0 30px rgba(139,92,246,.10)}
+.card{padding:18px;margin-top:12px}
+.row{display:flex;gap:10px;align-items:center}
+.between{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ttl{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:500}
+.ico{width:34px;height:34px;flex:none;border-radius:11px;display:grid;place-items:center;background:rgba(168,85,247,.2);border:1px solid var(--line);color:var(--pink2)}
+.ico svg,.nav svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+label{display:block;font-size:12px;color:var(--pink2);margin-bottom:4px}
+input,select{font:16px 'DM Sans',sans-serif;color:var(--ink);width:100%;height:46px;padding:0 12px;border-radius:14px;
+ background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.3);color-scheme:dark}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--lav);outline-offset:2px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+button{font:500 15px 'DM Sans',sans-serif;color:var(--ink);min-height:44px;padding:0 16px;border-radius:14px;cursor:pointer;
+ background:rgba(255,255,255,.06);border:1px solid var(--line)}
+button:active{transform:scale(.98)}
+.pri{background:linear-gradient(90deg,var(--vio),var(--pink));border:0;box-shadow:0 0 22px rgba(236,72,153,.45);width:100%}
+.mini{min-height:34px;font-size:13px;padding:0 10px;border-radius:10px}
+.ghost{background:transparent}
+.danger{color:#fda4af;border-color:rgba(253,164,175,.35)}
+.today{display:flex;gap:16px;align-items:center}
+.ring{width:124px;height:124px;flex:none;position:relative}
+.ring svg{transform:rotate(-90deg);width:124px;height:124px}
+.ring .in{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring b{font-size:24px;font-weight:500;white-space:nowrap}
+.ring small{font-size:12px;color:var(--soft)}
+.big{font-size:20px;font-weight:500}
+.muted{color:var(--soft);font-size:14px}
+.tiny{font-size:13px;color:var(--mut)}
+.stat{padding:14px}
+.stat small{display:block;font-size:12px;color:var(--soft)}
+.stat b{display:block;font-size:22px;font-weight:500;white-space:nowrap}
+.stat .eur{font-size:14px;color:var(--pink2);white-space:nowrap}
+.tag{display:inline-block;font-size:12px;margin-top:6px;padding:2px 9px;border-radius:20px;white-space:nowrap}
+.t-pend{background:rgba(244,114,182,.15);color:var(--pink2)}
+.t-ok{background:rgba(45,212,191,.14);color:var(--ok)}
+.t-par{background:rgba(252,211,77,.12);color:var(--warn)}
+.t-none{background:rgba(255,255,255,.06);color:var(--mut)}
+.fig{position:relative;height:120px;margin-top:10px}
+.fig svg{position:absolute;inset:0;width:100%;height:100%}
+.days{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:12px;color:var(--mut);margin-top:4px}
+.days b{display:block;color:var(--soft);font-weight:500}
+.list{margin-top:10px}
+.it{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 0;border-top:1px solid rgba(216,180,254,.12);font-size:14px}
+.it:first-child{border-top:0}
+.it .r{text-align:right;white-space:nowrap}
+.it button{min-height:36px}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center;margin-top:12px}
+.cal .h{font-size:12px;color:var(--mut);padding-bottom:2px}
+.cal button{min-height:44px;padding:2px 0;border-radius:12px;font-size:14px;border:1px solid transparent;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
+.cal button small{font-size:10px;color:var(--pink2)}
+.cal .w{background:rgba(168,85,247,.13)}
+.cal .in{background:rgba(244,114,182,.18)}
+.cal .edge{background:linear-gradient(135deg,var(--vio),var(--pink));box-shadow:0 0 12px rgba(236,72,153,.5)}
+.cal .edge small{color:#fff}
+.cal .td{border-color:var(--lav)}
+.cal .sel{outline:2px solid #fff;outline-offset:-2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sum{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:12px}
+.sum div{background:rgba(255,255,255,.04);border-radius:14px;padding:10px 12px}
+.sum small{display:block;font-size:12px;color:var(--soft)}
+.sum b{font-size:18px;font-weight:500;white-space:nowrap}
+.acts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:10px}
+.acts a{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;border-radius:14px;border:1px solid rgba(244,114,182,.4);color:var(--pink2);text-decoration:none;font-weight:500;font-size:15px}
+.acts button{color:var(--pink2);border-color:rgba(244,114,182,.4)}
+.msg{font-size:13px;margin-top:8px;min-height:18px;color:var(--ok)}
+.msg.err{color:#fda4af}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;width:min(456px,calc(100% - 24px));height:72px;border-radius:36px;display:flex;justify-content:space-around;align-items:center;z-index:5;background:rgba(20,10,40,.75)}
+.nav a{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--mut);text-decoration:none;font-size:12px;min-width:64px}
+.nav a span.b{width:40px;height:40px;border-radius:50%;display:grid;place-items:center}
+.nav a.on{color:#fff}
+.nav a.on span.b{background:radial-gradient(circle,var(--lav),#7c3aed);box-shadow:0 0 20px rgba(192,132,252,.8)}
+.view{display:none}.view.on{display:block}
+.sheet{margin-top:12px;border-color:rgba(244,114,182,.45)}
+.clock{text-align:center;padding:20px 18px}
+.clock .st{font-size:13px;color:var(--soft)}
+.clock .tm{font:500 40px/1.1 'Cormorant Garamond',serif;margin:4px 0 2px}
+.clock .pri{margin-top:12px;min-height:52px;font-size:16px}
+.live{display:inline-flex;align-items:center;gap:6px;color:var(--ok);font-size:13px}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.alert{border-color:rgba(252,211,77,.35);padding:14px 16px}
+.alert .it span{font-size:14px}
+.wd{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.wd label{display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin:0;border-radius:12px;border:1px solid var(--line);color:var(--soft);font-size:14px;cursor:pointer}
+.wd input{position:absolute;opacity:0;width:1px;height:1px}
+.wd input:checked+span{color:#fff}
+.wd label:has(input:checked){background:rgba(168,85,247,.3);border-color:var(--lav)}
+.advrow{display:flex;justify-content:space-between;font-size:14px;margin-top:8px;color:var(--soft)}
+.advrow b{color:#fff;font-weight:500;white-space:nowrap}
+.app{padding-top:env(safe-area-inset-top)}
+.gate{max-width:420px;margin:0 auto;padding:calc(40px + env(safe-area-inset-top)) 18px 40px;position:relative}
+.gate .orb{right:-60px;top:-20px}
+.gate h1{font:500 38px/1.05 'Cormorant Garamond',serif;position:relative;margin-top:60px}
+.gate p{color:var(--soft);position:relative;margin-top:8px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
+.tabs button.on{background:rgba(168,85,247,.3);border-color:var(--lav)}
+.field{margin-top:10px}
+.link{background:none;border:0;color:var(--pink2);text-decoration:underline;min-height:36px;padding:0;font-size:14px}
+body.locked .app,body.locked .nav{display:none}
+body:not(.locked) .gate{display:none}
+.nav{bottom:calc(12px + env(safe-area-inset-bottom))}
+@media (prefers-reduced-motion:no-preference){.orb{animation:fl 7s ease-in-out infinite}@keyframes fl{50%{transform:translateY(8px)}}}
+</style>
+</head>
+<body class="locked">
+<div class="gate" id="gate">
+ <div class="orb" aria-hidden="true"></div>
+ <div class="brand"><b>MIS HORAS</b><small>ANA PAOLA</small></div>
+ <div id="gateBody"><p>Cargando…</p></div>
+</div>
+<div class="app">
+ <div class="stars" aria-hidden="true"><i style="top:30px;left:42%"></i><i style="top:80px;left:22%;opacity:.4"></i><i style="top:140px;left:70%"></i><i style="top:200px;left:35%;opacity:.4"></i><i style="top:60px;left:88%;opacity:.5"></i><i style="top:250px;left:60%"></i></div>
+ <header>
+  <div class="brand"><b>MIS HORAS</b><small id="hName">ANA PAOLA</small></div>
+  <div class="av" id="hAv" aria-hidden="true">AP</div>
+ </header>
+ <div id="sync" class="note" hidden></div>
+
+ <!-- HOY -->
+ <section class="view" id="v-hoy">
+  <div class="hero">
+   <div class="orb" aria-hidden="true"></div>
+   <h1>Tu trabajo, tus horas.</h1>
+   <p id="heroDate">Controla lo que trabajas y lo que ganas, día a día.</p>
+  </div>
+
+  <div id="alerts"></div>
+  <div class="glass card clock" id="clock"></div>
+
+  <div class="glass card">
+   <div class="today">
+    <div class="ring" aria-hidden="true">
+     <svg viewBox="0 0 124 124"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f472b6"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+      <circle cx="62" cy="62" r="52" stroke="rgba(255,255,255,.08)" stroke-width="10" fill="none"/>
+      <circle id="ringArc" cx="62" cy="62" r="52" stroke="url(#rg)" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" style="filter:drop-shadow(0 0 6px #e879f9);transition:stroke-dashoffset .6s"/>
+     </svg>
+     <div class="in"><b id="rEur">0,00 €</b><small id="rLbl">hoy</small></div>
+    </div>
+    <div style="flex:1">
+     <div class="big" id="rDur">Sin registrar</div>
+     <div class="tiny" id="rInfo">Elige el día y pon la entrada y la salida.</div>
+    </div>
+   </div>
+
+   <p class="tiny" style="margin-top:14px">Apuntar o corregir a mano. Puedes dejar la salida vacía y ponerla después.</p>
+   <div style="margin-top:8px">
+    <label for="fDate">Día</label>
+    <input type="date" id="fDate">
+   </div>
+   <div class="grid2" style="margin-top:10px">
+    <div><label for="fIn">Entrada</label><input type="time" id="fIn"><button class="mini ghost" style="margin-top:6px;width:100%" data-now="fIn">Ahora</button></div>
+    <div><label for="fOut">Salida</label><input type="time" id="fOut"><button class="mini ghost" style="margin-top:6px;width:100%" data-now="fOut">Ahora</button></div>
+   </div>
+   <div style="margin-top:12px"><button class="pri" id="bSave">Guardar día</button></div>
+   <div class="between" style="margin-top:8px"><div class="msg" id="mSave" role="status"></div><button class="mini danger" id="bDel" hidden>Borrar día</button></div>
+  </div>
+
+  <div class="grid2" style="margin-top:12px">
+   <div class="glass stat"><small id="wLbl">Esta semana</small><b id="wH">0 h</b><span class="eur" id="wE">0,00 €</span><br><span class="tag t-none" id="wS">Sin horas</span></div>
+   <div class="glass stat"><small id="mLbl">Este mes</small><b id="mH">0 h</b><span class="eur" id="mE">0,00 €</span><br><span class="tag t-none" id="mS">Sin horas</span></div>
+  </div>
+
+  <div class="glass card">
+   <div class="between">
+    <div class="ttl"><span class="ico"><svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 4 8-9"/></svg></span>Horas de la semana</div>
+    <div style="text-align:right"><b id="cTot" style="font-weight:500">0 h</b><br><span class="tiny" id="cRange"></span></div>
+   </div>
+   <div class="fig"><svg id="chart" role="img" aria-label="Horas trabajadas cada día de la semana"></svg></div>
+   <div class="days" id="cDays"></div>
+   <div class="list" id="wList"></div>
+  </div>
+ </section>
+
+ <!-- CALENDARIO -->
+ <section class="view" id="v-calendario">
+  <div class="hero" style="min-height:110px"><div class="orb" aria-hidden="true" style="width:140px;height:140px"></div><h1>De tal fecha a tal fecha</h1></div>
+  <div class="glass card">
+   <div class="between">
+    <button class="mini" id="calPrev" aria-label="Mes anterior">‹</button>
+    <div class="big" id="calTitle" style="font-size:18px"></div>
+    <button class="mini" id="calNext" aria-label="Mes siguiente">›</button>
+   </div>
+   <div class="cal" id="cal"></div>
+   <p class="tiny" style="margin-top:8px">Toca un día para ver o cambiar sus horas.</p>
+   <div id="dayBox"></div>
+  </div>
+
+  <div class="glass card">
+   <div class="ttl"><span class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>Calcular un periodo</div>
+   <div class="grid2" style="margin-top:12px">
+    <div><label for="rFrom">Desde</label><input type="date" id="rFrom"></div>
+    <div><label for="rTo">Hasta</label><input type="date" id="rTo"></div>
+   </div>
+   <div class="chips">
+    <button class="mini" data-pre="week">Esta semana</button>
+    <button class="mini" data-pre="month">Este mes</button>
+    <button class="mini" data-pre="q1">Del 1 al 15</button>
+    <button class="mini" data-pre="q2">Del 16 a fin de mes</button>
+    <button class="mini" data-pre="last">Mes pasado</button>
+   </div>
+   <div class="msg err" id="mRange"></div>
+   <div class="sum">
+    <div><small>Horas</small><b id="sH">0 h</b></div>
+    <div><small>Días trabajados</small><b id="sD">0</b></div>
+    <div><small>Total devengado</small><b id="sE">0,00 €</b></div>
+    <div><small>Pendiente de cobro</small><b id="sP">0,00 €</b></div>
+   </div>
+   <div id="sAdv"></div>
+   <div class="acts">
+    <a id="aWa" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/></svg>WhatsApp</a>
+    <button id="bPdf">Descargar PDF</button>
+    <button id="bCopy">Copiar resumen</button>
+    <button id="bPay">Marcar como pagado</button>
+   </div>
+   <div class="msg" id="mAct" role="status"></div>
+  </div>
+ </section>
+
+ <!-- PAGOS -->
+ <section class="view" id="v-pagos">
+  <div class="hero" style="min-height:110px"><div class="orb" aria-hidden="true" style="width:140px;height:140px"></div><h1>Pagos</h1></div>
+  <div class="grid2">
+   <div class="glass stat"><small>Le deben</small><b id="pPend">0,00 €</b><span class="tiny" id="pPendH">0 h sin cobrar</span></div>
+  </div>
+  <div class="glass card">
+   <div class="ttl"><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v18M17 7H9.5a3 3 0 0 0 0 6h5a3 3 0 0 1 0 6H6"/></svg></span>Adelantos</div>
+   <p class="tiny" style="margin-top:6px">Dinero que le dan a cuenta antes del pago. Se descuenta en el siguiente pago que marques.</p>
+   <div class="grid2" style="margin-top:10px">
+    <div><label for="advAmt">Importe (€)</label><input type="number" id="advAmt" min="0" step="0.01" inputmode="decimal" placeholder="50"></div>
+    <div><label for="advDate">Fecha</label><input type="date" id="advDate"></div>
+   </div>
+   <div style="margin-top:10px"><label for="advNote">Nota (opcional)</label><input type="text" id="advNote" maxlength="60" placeholder="Para la compra"></div>
+   <div style="margin-top:10px"><button class="pri" id="bAdv">Apuntar adelanto</button></div>
+   <div class="msg" id="mAdv" role="status"></div>
+   <div class="list" id="advList"></div>
+  </div>
+  <div class="grid2" style="margin-top:12px">
+   <div class="glass stat"><small>Adelantos sin descontar</small><b id="pAdv">0,00 €</b><span class="tiny" id="pAdvN">ninguno</span></div>
+   <div class="glass stat"><small>Cobrado en total</small><b id="pPaid">0,00 €</b><span class="tiny" id="pCount">0 pagos</span></div>
+  </div>
+  <div class="glass card">
+   <div class="ttl"><span class="ico"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3"/><circle cx="12" cy="12" r="3"/></svg></span>Semanas</div>
+   <div class="list" id="wkList"></div>
+  </div>
+  <div class="glass card">
+   <div class="ttl"><span class="ico"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span>Pagos registrados</div>
+   <div class="list" id="payList"></div>
+  </div>
+ </section>
+
+ <!-- AJUSTES -->
+ <section class="view" id="v-ajustes">
+  <div class="hero" style="min-height:110px"><div class="orb" aria-hidden="true" style="width:140px;height:140px"></div><h1>Ajustes</h1></div>
+  <div class="glass card">
+   <label for="aRate">Precio por hora (€)</label>
+   <input type="number" id="aRate" min="0" step="0.5" inputmode="decimal">
+   <p class="tiny" style="margin-top:6px">Si lo cambias, solo se aplica a los días que guardes desde ese momento. Los días ya guardados conservan su precio.</p>
+   <label style="margin-top:14px">Días que trabaja normalmente</label>
+   <div class="wd" id="aDays"></div>
+   <p class="tiny" style="margin-top:6px">Sirve para avisar si un día de trabajo se quedó sin apuntar.</p>
+   <label for="aName" style="margin-top:14px">Nombre</label>
+   <input type="text" id="aName" maxlength="40">
+   <label for="aAvIn" style="margin-top:14px">Aviso de entrada si no ha fichado a las</label>
+   <input type="time" id="aAvIn">
+   <label for="aAvOut" style="margin-top:14px">Aviso de salida si lleva fichada (horas)</label>
+   <input type="number" id="aAvOut" min="1" max="16" step="0.5" inputmode="decimal">
+   <div style="margin-top:14px"><button class="pri" id="bCfg">Guardar ajustes</button></div>
+   <div class="msg" id="mCfg" role="status"></div>
+  </div>
+  <div class="glass card">
+   <div class="ttl"><span class="ico"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4"/></svg></span>Notificaciones</div>
+   <p class="tiny" style="margin-top:6px" id="pushInfo"></p>
+   <div style="margin-top:10px"><button id="bPush" style="width:100%">Activar notificaciones en este móvil</button></div>
+   <div class="msg" id="mPush" role="status"></div>
+  </div>
+  <div class="glass card" id="usersCard" hidden>
+   <div class="ttl"><span class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c1-4 4-6 7-6s6 2 7 6M17 11l2 2 4-4"/></svg></span>Usuarios</div>
+   <p class="tiny" style="margin-top:6px">Solo tú ves esto. Aprueba a quien deba usar la app.</p>
+   <div class="list" id="usersList"></div>
+  </div>
+  <div class="glass card">
+   <p class="tiny" id="whoami"></p>
+   <div style="margin-top:10px"><button id="bOut" class="danger" style="width:100%">Cerrar sesión</button></div>
+  </div>
+  <div class="glass card">
+   <p class="muted">Semana de lunes a domingo. Mes natural, del 1 al último día. Todo el tiempo entre la entrada y la salida cuenta como trabajado. Si la salida es después de medianoche, se cuenta igual.</p>
+  </div>
+ </section>
+</div>
+
+<nav class="glass nav" aria-label="Secciones">
+ <a href="#hoy" data-v="hoy"><span class="b"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/></svg></span>Hoy</a>
+ <a href="#calendario" data-v="calendario"><span class="b"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>Calendario</a>
+ <a href="#pagos" data-v="pagos"><span class="b"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3"/><circle cx="12" cy="12" r="3"/></svg></span>Pagos</a>
+ <a href="#ajustes" data-v="ajustes"><span class="b"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.8 1.2V21a2 2 0 1 1-4 0v-.1A1.7 1.7 0 0 0 7 19.4a1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 3.6 14H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 7a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 10 3.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.8 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 20.4 10H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span>Ajustes</a>
+</nav>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script type="module">
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendPasswordResetEmail,sendEmailVerification,signOut,updateProfile} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,collection,doc,onSnapshot,setDoc,deleteDoc,getDoc,updateDoc,arrayUnion} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import {getMessaging,getToken,isSupported} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js';
+{
+const FB_CONFIG={apiKey:"AIzaSyD56bAmRZdJ1WRiGPIo7LDc8ri7JFeM7KI",authDomain:"mis-horas-ana-paola.firebaseapp.com",projectId:"mis-horas-ana-paola",storageBucket:"mis-horas-ana-paola.firebasestorage.app",messagingSenderId:"981558333028",appId:"1:981558333028:web:c5cacbdebf8654c43a9971"};
+const VAPID_KEY='';
+const ADMIN_EMAIL='cesarjluzardo18@gmail.com';
+const fbApp=initializeApp(FB_CONFIG);
+const auth=getAuth(fbApp);
+let fs;try{fs=initializeFirestore(fbApp,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})})}catch(e){fs=initializeFirestore(fbApp,{})}
+let ME=null;
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const monday=d=>addD(d,-((d.getDay()+6)%7));
+const toMin=t=>{const[h,m]=t.split(':').map(Number);return h*60+m};
+const durMin=(a,b)=>{const x=toMin(a),y=toMin(b);return y>=x?y-x:y+1440-x};
+const eurF=new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'});
+const eur=n=>eurF.format(Math.round(n*100)/100);
+const hDec=m=>(Math.round(m/60*100)/100).toLocaleString('es-ES')+' h';
+const hLong=m=>{const h=Math.floor(m/60),r=m%60;return h+' h'+(r?' '+r+' min':'')};
+const MES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const DS=['lun','mar','mié','jue','vie','sáb','dom'];
+const dLabel=s=>{const d=parse(s);return DS[(d.getDay()+6)%7]+' '+d.getDate()+'/'+(d.getMonth()+1)};
+const dShort=s=>{const d=parse(s);return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const DEF_CFG={tarifa:8,nombre:'Ana Paola',diasTrabajo:[0,1,2,3,4],horaAvisoEntrada:'10:00',horasAvisoSalida:9};
+const S={dias:{},pagos:[],adv:[],users:[],cfg:Object.assign({},DEF_CFG)};
+let db=null,local=false;
+let calMonth=new Date();calMonth.setDate(1);
+let selDay=null;
+
+const LS='mishoras-ana-paola';
+function loadLocal(){try{const j=JSON.parse(localStorage.getItem(LS)||'null');if(j){S.dias=j.dias||{};S.pagos=j.pagos||[];S.adv=j.adv||[];S.cfg=Object.assign({},DEF_CFG,j.cfg||{})}}catch(e){}}
+function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
+
+const rateOf=d=>typeof d.tarifa==='number'?d.tarifa:S.cfg.tarifa;
+const done=d=>!!(d&&d.entrada&&d.salida);
+const isOpen=d=>!!(d&&d.entrada&&!d.salida);
+const isLibre=d=>!!(d&&d.libre);
+const minOf=d=>done(d)?durMin(d.entrada,d.salida):0;
+const eurOf=d=>minOf(d)/60*rateOf(d);
+const isPaid=f=>S.pagos.some(p=>p.desde<=f&&f<=p.hasta);
+const advOpen=hasta=>S.adv.filter(a=>!a.pagoId&&(!hasta||a.fecha<=hasta));
+const advSum=l=>l.reduce((s,a)=>s+(+a.importe||0),0);
+function range(a,b){
+ const ks=Object.keys(S.dias).filter(k=>k>=a&&k<=b&&done(S.dias[k])).sort();
+ let m=0,e=0,pm=0,pe=0;
+ ks.forEach(k=>{const d=S.dias[k],mm=minOf(d),ee=eurOf(d);m+=mm;e+=ee;if(!isPaid(k)){pm+=mm;pe+=ee}});
+ return{ks,m,e,pm,pe};
+}
+function status(r){
+ if(!r.ks.length)return['Sin horas','t-none'];
+ if(r.pe<0.005)return['Pagado','t-ok'];
+ if(r.pe>=r.e-0.005)return['Pendiente','t-pend'];
+ return['Pendiente '+eur(r.pe),'t-par'];
+}
+function setTag(el,r){const[t,c]=status(r);el.textContent=t;el.className='tag '+c}
+
+/* ---------- writes ---------- */
+async function putDay(f,data){
+ if(data&&ME)data=Object.assign({},data,{por:ME.email||''});
+ if(data)S.dias[f]=data;else delete S.dias[f];
+ if(local){saveLocal();return}
+ const ref=db.collection('dias').doc(f);
+ if(data)await ref.set(data);else await ref.delete();
+}
+async function putPago(p){
+ if(local){S.pagos.push(p);saveLocal();return}
+ await db.collection('pagos').doc(p.id).set(p);
+}
+async function delPago(id){
+ for(const a of S.adv.filter(a=>a.pagoId===id)){const n=Object.assign({},a);delete n.pagoId;await putAdv(n)}
+ if(local){S.pagos=S.pagos.filter(p=>p.id!==id);saveLocal();return}
+ await db.collection('pagos').doc(id).delete();
+}
+async function putAdv(a){
+ const i=S.adv.findIndex(x=>x.id===a.id);if(i>=0)S.adv[i]=a;else S.adv.push(a);
+ if(local){saveLocal();return}
+ await db.collection('adelantos').doc(a.id).set(a);
+}
+async function delAdv(id){
+ S.adv=S.adv.filter(a=>a.id!==id);
+ if(local){saveLocal();return}
+ await db.collection('adelantos').doc(id).delete();
+}
+/* marca un periodo como pagado: descuenta los adelantos pendientes hasta esa fecha */
+async function payPeriod(a,b){
+ const r=range(a,b),advs=advOpen(b),ad=advSum(advs);
+ if(ad>r.pe+0.005)throw{code:'adv'};
+ const id='p'+Date.now().toString(36);
+ const p={id,desde:a,hasta:b,devengado:Math.round(r.pe*100)/100,adelantos:Math.round(ad*100)/100,importe:Math.max(0,Math.round((r.pe-ad)*100)/100),horas:r.pm,fecha:ymd(new Date())};
+ await putPago(p);
+ for(const x of advs)await putAdv(Object.assign({},x,{pagoId:id}));
+ return p;
+}
+async function putCfg(c){
+ S.cfg=c;
+ if(local){saveLocal();return}
+ await db.doc('config/ajustes').set(c);
+}
+
+/* ---------- HOY ---------- */
+function fillForm(){
+ const f=$('fDate').value,d=S.dias[f];
+ $('fIn').value=d&&d.entrada||'';$('fOut').value=d&&d.salida||'';
+ $('bDel').hidden=!d;
+}
+/* ---------- FICHAR ---------- */
+const nowHM=()=>{const n=new Date();return pad(n.getHours())+':'+pad(n.getMinutes())};
+function openShift(){
+ const t=ymd(new Date()),y=ymd(addD(new Date(),-1));
+ if(isOpen(S.dias[t]))return t;
+ if(isOpen(S.dias[y]))return y;
+ return null;
+}
+function renderClock(){
+ const t=ymd(new Date()),o=openShift(),d=S.dias[t],el=$('clock');
+ if(o){const x=S.dias[o],m=durMin(x.entrada,nowHM());
+  el.innerHTML='<span class="live"><i></i>Trabajando'+(o!==t?' desde ayer':'')+'</span><div class="tm">desde las '+esc(x.entrada)+'</div><div class="st">Llevas '+hLong(m)+' · '+eur(m/60*rateOf(x))+'</div><button class="pri" id="bClock">Fichar salida</button><div class="msg" id="mClock" role="status"></div>';
+  $('bClock').onclick=()=>clockOut(o)}
+ else if(done(d)){el.innerHTML='<div class="st">Hoy ya está apuntado</div><div class="tm">'+esc(d.entrada)+' – '+esc(d.salida)+'</div><div class="st">'+hLong(minOf(d))+' · '+eur(eurOf(d))+'</div>'}
+ else{el.innerHTML='<div class="st">'+(isLibre(d)?'Hoy marcado como día libre':'Todavía no has fichado hoy')+'</div><div class="tm" id="clkNow">'+nowHM()+'</div><button class="pri" id="bClock">Fichar entrada</button><div class="msg" id="mClock" role="status"></div>';
+  $('bClock').onclick=clockIn}
+}
+async function clockIn(){
+ const t=ymd(new Date()),m=$('mClock');$('bClock').disabled=true;
+ try{await putDay(t,{entrada:nowHM(),salida:null,tarifa:S.cfg.tarifa,actualizado:new Date().toISOString()});renderAll()}
+ catch(e){$('bClock').disabled=false;m.className='msg err';m.textContent='No se pudo fichar. Revisa la conexión.'}
+}
+async function clockOut(f){
+ const x=S.dias[f],s=nowHM(),m=$('mClock');
+ if(s===x.entrada&&f===ymd(new Date())){m.className='msg err';m.textContent='Espera al menos un minuto desde la entrada.';return}
+ $('bClock').disabled=true;
+ try{await putDay(f,Object.assign({},x,{salida:s,actualizado:new Date().toISOString()}));renderAll()}
+ catch(e){$('bClock').disabled=false;m.className='msg err';m.textContent='No se pudo fichar. Revisa la conexión.'}
+}
+/* ---------- AVISOS ---------- */
+function alertsList(){
+ const t=ymd(new Date()),o=openShift(),out=[];
+ Object.keys(S.dias).sort().forEach(k=>{if(k<t&&k!==o&&isOpen(S.dias[k]))out.push({k,txt:'Falta la hora de salida',type:'open'})});
+ const ks=Object.keys(S.dias).sort();
+ if(ks.length){const first=ks[0],wd=S.cfg.diasTrabajo||[];
+  for(let i=14;i>=1;i--){const d=addD(new Date(),-i),k=ymd(d);
+   if(k<first||S.dias[k]||k===o)continue;
+   if(wd.includes((d.getDay()+6)%7))out.push({k,txt:'Sin apuntar',type:'miss'})}}
+ return out.sort((a,b)=>a.k.localeCompare(b.k));
+}
+function renderAlerts(){
+ const l=alertsList();
+ $('alerts').innerHTML=l.length?'<div class="glass card alert"><div class="ttl" style="color:var(--warn)">'+(l.length===1?'1 día por revisar':l.length+' días por revisar')+'</div><div class="list">'+
+ l.map(a=>'<div class="it"><span>'+dLabel(a.k)+'<br><span class="tiny">'+a.txt+(a.type==='open'?' · entrada '+esc(S.dias[a.k].entrada):'')+'</span></span><span class="r"><button class="mini" data-fix="'+a.k+'">Completar</button>'+(a.type==='miss'?' <button class="mini ghost" data-libre="'+a.k+'">No trabajó</button>':'')+'</span></div>').join('')+'</div></div>':'';
+}
+$('alerts').addEventListener('click',async e=>{
+ const f=e.target.closest('[data-fix]'),l=e.target.closest('[data-libre]');
+ if(f){$('fDate').value=f.dataset.fix;fillForm();renderHoy();$('fIn').scrollIntoView({behavior:'smooth',block:'center'});(S.dias[f.dataset.fix]?$('fOut'):$('fIn')).focus()}
+ if(l){l.disabled=true;try{await putDay(l.dataset.libre,{libre:true,actualizado:new Date().toISOString()});renderAll()}catch(x){l.disabled=false;l.textContent='Error'}}
+});
+setInterval(()=>{const a=document.activeElement;if(!a||!a.closest||!a.closest('#clock'))renderClock()},30000);
+function renderHoy(){
+ const f=$('fDate').value||ymd(new Date());
+ const d=S.dias[f],isToday=f===ymd(new Date());
+ const dd=parse(f);
+ $('heroDate').textContent=(isToday?'Hoy, ':'')+DS[(dd.getDay()+6)%7]+' '+dd.getDate()+' de '+MES[dd.getMonth()]+' · '+eur(S.cfg.tarifa)+' / hora';
+ if(isOpen(d)){$('rEur').textContent=eur(0);$('rDur').textContent='Entrada '+d.entrada;$('rInfo').textContent='Falta la hora de salida.';$('ringArc').style.strokeDashoffset=326.7}
+ else if(isLibre(d)){$('rEur').textContent=eur(0);$('rDur').textContent='Día libre';$('rInfo').textContent='Marcado como que no trabajó.';$('ringArc').style.strokeDashoffset=326.7}
+ else if(d){const m=minOf(d);$('rEur').textContent=eur(eurOf(d));$('rDur').textContent=hLong(m);
+  $('rInfo').textContent=d.entrada+' – '+d.salida+' · '+eur(rateOf(d))+'/h'+(isPaid(f)?' · Pagado':'');
+  $('ringArc').style.strokeDashoffset=326.7*(1-Math.min(m/480,1));}
+ else{$('rEur').textContent=eur(0);$('rDur').textContent='Sin registrar';$('rInfo').textContent='Pon la entrada y la salida y pulsa Guardar.';$('ringArc').style.strokeDashoffset=326.7}
+ $('rLbl').textContent=isToday?'hoy':dLabel(f);
+ const mon=monday(dd),sun=addD(mon,6);
+ const w=range(ymd(mon),ymd(sun));
+ $('wLbl').textContent=isToday||ymd(monday(new Date()))===ymd(mon)?'Esta semana':'Semana del '+mon.getDate()+'/'+(mon.getMonth()+1);
+ $('wH').textContent=hDec(w.m);$('wE').textContent=eur(w.e);setTag($('wS'),w);
+ const m1=new Date(dd.getFullYear(),dd.getMonth(),1),m2=new Date(dd.getFullYear(),dd.getMonth()+1,0);
+ const mo=range(ymd(m1),ymd(m2));
+ $('mLbl').textContent=MES[dd.getMonth()][0].toUpperCase()+MES[dd.getMonth()].slice(1);
+ $('mH').textContent=hDec(mo.m);$('mE').textContent=eur(mo.e);setTag($('mS'),mo);
+ $('cTot').textContent=hDec(w.m);$('cRange').textContent=dLabel(ymd(mon))+' – '+dLabel(ymd(sun));
+ const vals=[];let html='';
+ for(let i=0;i<7;i++){const k=ymd(addD(mon,i)),x=S.dias[k];const mm=x?minOf(x):0;vals.push(mm);
+  html+='<div>'+'LMXJVSD'[i]+'<b>'+(mm?(Math.round(mm/60*10)/10).toLocaleString('es-ES'):'·')+'</b></div>'}
+ $('cDays').innerHTML=html;
+ S._vals=vals;drawChart();
+ $('wList').innerHTML=w.ks.length?w.ks.map(k=>{const x=S.dias[k];return '<div class="it"><span>'+dLabel(k)+'<br><span class="tiny">'+x.entrada+' – '+x.salida+'</span></span><span class="r">'+hDec(minOf(x))+'<br><span class="tiny">'+eur(eurOf(x))+'</span></span></div>'}).join(''):'<p class="tiny" style="padding-top:6px">Aún no hay días guardados esta semana.</p>';
+}
+const chartEl=$('chart');
+function drawChart(){
+ const v=S._vals||[0,0,0,0,0,0,0];const W=chartEl.clientWidth||300,H=chartEl.clientHeight||120;
+ const max=Math.max(480,...v),pd=12;
+ const pts=v.map((m,i)=>[pd+(W-2*pd)*(i/6),H-10-(H-24)*(m/max)]);
+ let d='M'+pts[0][0]+' '+pts[0][1];
+ for(let i=0;i<6;i++){const[a,b]=[pts[i],pts[i+1]],cx=(a[0]+b[0])/2;d+=' C'+cx+' '+a[1]+','+cx+' '+b[1]+','+b[0]+' '+b[1]}
+ chartEl.innerHTML='<defs><linearGradient id="cw" x1="0" x2="1"><stop offset="0" stop-color="#f472b6"/><stop offset=".5" stop-color="#a855f7"/><stop offset="1" stop-color="#818cf8"/></linearGradient><linearGradient id="cf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a855f7" stop-opacity=".45"/><stop offset="1" stop-color="#a855f7" stop-opacity="0"/></linearGradient></defs>'+
+ '<path d="'+d+' L'+(W-pd)+' '+H+' L'+pd+' '+H+'Z" fill="url(#cf)"/><path d="'+d+'" fill="none" stroke="url(#cw)" stroke-width="3" style="filter:drop-shadow(0 0 6px #c084fc)"/>'+
+ pts.map((p,i)=>v[i]?'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="4" fill="#fff" style="filter:drop-shadow(0 0 5px #f472b6)"/>':'').join('');
+}
+const ro=new ResizeObserver(drawChart);ro.observe(chartEl);
+
+$('fDate').addEventListener('change',()=>{fillForm();renderHoy();$('mSave').textContent=''});
+document.querySelectorAll('[data-now]').forEach(b=>b.addEventListener('click',()=>{const n=new Date();$(b.dataset.now).value=pad(n.getHours())+':'+pad(n.getMinutes())}));
+$('bSave').addEventListener('click',async()=>{
+ const f=$('fDate').value,a=$('fIn').value,b=$('fOut').value,m=$('mSave');m.className='msg';
+ if(!f){m.className='msg err';m.textContent='Elige el día.';return}
+ if(!a){m.className='msg err';m.textContent='Pon al menos la hora de entrada.';return}
+ if(a===b){m.className='msg err';m.textContent='La entrada y la salida no pueden ser iguales.';return}
+ const prev=S.dias[f];
+ const data={entrada:a,salida:b||null,tarifa:prev&&typeof prev.tarifa==='number'&&prev.entrada?prev.tarifa:S.cfg.tarifa,actualizado:new Date().toISOString()};
+ try{await putDay(f,data);m.textContent=b?'Guardado: '+hLong(minOf(data))+' · '+eur(eurOf(data)):'Entrada guardada. Falta la salida.';renderAll()}
+ catch(e){m.className='msg err';m.textContent='No se pudo guardar. Revisa la conexión e inténtalo otra vez.'}
+});
+$('bDel').addEventListener('click',async()=>{
+ const f=$('fDate').value,m=$('mSave');
+ if($('bDel').dataset.c!=='1'){$('bDel').dataset.c='1';$('bDel').textContent='¿Seguro? Toca otra vez';setTimeout(()=>{$('bDel').dataset.c='';$('bDel').textContent='Borrar día'},4000);return}
+ $('bDel').dataset.c='';$('bDel').textContent='Borrar día';
+ try{await putDay(f,null);m.className='msg';m.textContent='Día borrado.';fillForm();renderAll()}catch(e){m.className='msg err';m.textContent='No se pudo borrar.'}
+});
+
+/* ---------- CALENDARIO ---------- */
+function renderCal(){
+ const y=calMonth.getFullYear(),mo=calMonth.getMonth();
+ $('calTitle').textContent=MES[mo][0].toUpperCase()+MES[mo].slice(1)+' '+y;
+ const a=$('rFrom').value,b=$('rTo').value,today=ymd(new Date());
+ let h='LMXJVSD'.split('').map(c=>'<div class="h">'+c+'</div>').join('');
+ const first=new Date(y,mo,1),off=(first.getDay()+6)%7,n=new Date(y,mo+1,0).getDate();
+ for(let i=0;i<off;i++)h+='<div></div>';
+ for(let d=1;d<=n;d++){const k=y+'-'+pad(mo+1)+'-'+pad(d),x=S.dias[k];let c=[];
+  if(a&&b&&k>=a&&k<=b)c.push(k===a||k===b?'edge':'in');else if(done(x)||isOpen(x))c.push('w');
+  if(k===today)c.push('td');if(k===selDay)c.push('sel');
+  const sm=done(x)?(Math.round(minOf(x)/60*10)/10).toLocaleString('es-ES')+'h':isOpen(x)?'…':isLibre(x)?'libre':'';
+  h+='<button class="'+c.join(' ')+'" data-d="'+k+'" aria-label="'+d+' de '+MES[mo]+(done(x)?', '+hDec(minOf(x)):isOpen(x)?', falta la salida':isLibre(x)?', libre':'')+'">'+d+(sm?'<small>'+sm+'</small>':'')+'</button>'}
+ $('cal').innerHTML=h;
+ renderDayBox();
+}
+function renderDayBox(){
+ if(!selDay){$('dayBox').innerHTML='';return}
+ const y=S.dias[selDay],x=done(y)?y:null;
+ const tg=x?(isPaid(selDay)?['Pagado','t-ok']:['Pendiente','t-pend']):isOpen(y)?['Falta salida','t-par']:isLibre(y)?['Libre','t-none']:['Sin horas','t-none'];
+ $('dayBox').innerHTML='<div class="glass card sheet"><div class="between"><b>'+dLabel(selDay)+'</b><span class="tag '+tg[1]+'">'+tg[0]+'</span></div>'+
+ (x?'<p class="muted" style="margin-top:6px">'+x.entrada+' – '+x.salida+' · '+hLong(minOf(x))+' · '+eur(eurOf(x))+'</p>':isOpen(y)?'<p class="muted" style="margin-top:6px">Entrada '+esc(y.entrada)+'. Falta la hora de salida.</p>':'<p class="muted" style="margin-top:6px">No hay horas guardadas este día.</p>')+
+ '<div class="grid2" style="margin-top:10px"><button id="bEditDay">'+(x?'Cambiar horas':'Añadir horas')+'</button><button id="bFromDay">Usar en el periodo</button></div></div>';
+ $('bEditDay').addEventListener('click',()=>{$('fDate').value=selDay;fillForm();renderHoy();location.hash='hoy'});
+ $('bFromDay').addEventListener('click',()=>{const a=$('rFrom').value;if(!a||($('rTo').value&&a!==$('rTo').value)||selDay<a){$('rFrom').value=selDay;$('rTo').value=selDay}else{$('rTo').value=selDay}renderRange();renderCal()});
+}
+$('cal').addEventListener('click',e=>{const b=e.target.closest('[data-d]');if(!b)return;selDay=selDay===b.dataset.d?null:b.dataset.d;renderCal()});
+$('calPrev').addEventListener('click',()=>{calMonth.setMonth(calMonth.getMonth()-1);renderCal()});
+$('calNext').addEventListener('click',()=>{calMonth.setMonth(calMonth.getMonth()+1);renderCal()});
+document.querySelectorAll('[data-pre]').forEach(b=>b.addEventListener('click',()=>{
+ const t=new Date(),y=t.getFullYear(),m=t.getMonth();let a,z;
+ switch(b.dataset.pre){case'week':a=monday(t);z=addD(a,6);break;case'month':a=new Date(y,m,1);z=new Date(y,m+1,0);break;
+  case'q1':a=new Date(y,m,1);z=new Date(y,m,15);break;case'q2':a=new Date(y,m,16);z=new Date(y,m+1,0);break;case'last':a=new Date(y,m-1,1);z=new Date(y,m,0);break}
+ $('rFrom').value=ymd(a);$('rTo').value=ymd(z);calMonth=new Date(a.getFullYear(),a.getMonth(),1);renderRange();renderCal()}));
+['rFrom','rTo'].forEach(id=>$(id).addEventListener('change',()=>{renderRange();renderCal()}));
+
+function curRange(){const a=$('rFrom').value,b=$('rTo').value;if(!a||!b)return null;if(a>b)return{err:'La fecha «Desde» tiene que ser antes que «Hasta».'};return{a,b,r:range(a,b)}}
+function summaryText(c){
+ const L=['*Mis Horas · '+S.cfg.nombre+'*','Del '+dShort(c.a)+' al '+dShort(c.b),''];
+ c.r.ks.forEach(k=>{const x=S.dias[k];L.push(dLabel(k)+': '+x.entrada+'–'+x.salida+' · '+hDec(minOf(x))+' · '+eur(eurOf(x))+(isPaid(k)?' ✓':''))});
+ L.push('','*Total: '+hDec(c.r.m)+' · '+eur(c.r.e)+'*');
+ L.push('Pagado: '+eur(c.r.e-c.r.pe)+' · Pendiente: '+eur(c.r.pe));
+ const ad=advSum(advOpen(c.b));
+ if(ad>0.005&&c.r.pe>0.005)L.push('Adelantos a descontar: −'+eur(ad),'*A pagar: '+eur(Math.max(0,c.r.pe-ad))+'*');
+ return L.join('\n');
+}
+function renderRange(){
+ const c=curRange();$('mRange').textContent='';
+ if(!c||c.err){if(c)$('mRange').textContent=c.err;['sH','sD','sE','sP'].forEach((id,i)=>$(id).textContent=i===1?'0':i===0?'0 h':eur(0));$('aWa').href='#';return}
+ $('sH').textContent=hDec(c.r.m);$('sD').textContent=String(c.r.ks.length);$('sE').textContent=eur(c.r.e);$('sP').textContent=eur(c.r.pe);
+ const ad=advSum(advOpen(c.b));
+ $('sAdv').innerHTML=ad>0.005&&c.r.pe>0.005?'<div class="advrow"><span>Adelantos a descontar</span><b>−'+eur(ad)+'</b></div><div class="advrow"><span>A pagar</span><b>'+eur(Math.max(0,c.r.pe-ad))+'</b></div>':'';
+ $('aWa').href='https://wa.me/?text='+encodeURIComponent(summaryText(c));
+}
+$('aWa').addEventListener('click',e=>{const c=curRange();if(!c||c.err){e.preventDefault();$('mAct').className='msg err';$('mAct').textContent='Elige primero las fechas del periodo.'}});
+$('bCopy').addEventListener('click',async()=>{const c=curRange(),m=$('mAct');if(!c||c.err){m.className='msg err';m.textContent='Elige primero las fechas del periodo.';return}
+ try{await navigator.clipboard.writeText(summaryText(c));m.className='msg';m.textContent='Resumen copiado. Ya puedes pegarlo donde quieras.'}catch(e){m.className='msg err';m.textContent='No se pudo copiar en este dispositivo.'}});
+$('bPay').addEventListener('click',async()=>{const c=curRange(),m=$('mAct');if(!c||c.err){m.className='msg err';m.textContent='Elige primero las fechas del periodo.';return}
+ if(c.r.pe<0.005){m.className='msg';m.textContent='Este periodo ya está pagado entero.';return}
+ try{const p=await payPeriod(c.a,c.b);m.className='msg';m.textContent='Marcado como pagado: '+eur(p.importe)+(p.adelantos?' (ya descontados '+eur(p.adelantos)+' de adelantos)':'')+'.';renderAll()}
+ catch(e){m.className='msg err';m.textContent=e&&e.code==='adv'?'Los adelantos superan lo que se le debe en este periodo. Elige un periodo más largo.':'No se pudo guardar el pago.'}});
+$('bPdf').addEventListener('click',async()=>{
+ const c=curRange(),m=$('mAct');if(!c||c.err){m.className='msg err';m.textContent='Elige primero las fechas del periodo.';return}
+ if(!window.jspdf){m.className='msg err';m.textContent='El PDF no está disponible ahora mismo. Usa Copiar resumen.';return}
+ const doc=new window.jspdf.jsPDF({unit:'mm',format:'a4'});
+ doc.setFillColor(43,20,82);doc.rect(0,0,210,34,'F');
+ doc.setTextColor(255,255,255);doc.setFont('times','normal');doc.setFontSize(22);doc.text('Mis Horas · '+S.cfg.nombre,16,17);
+ doc.setFont('helvetica','normal');doc.setFontSize(11);doc.setTextColor(249,168,212);doc.text('Del '+dShort(c.a)+' al '+dShort(c.b)+'  ·  '+eur(S.cfg.tarifa)+' / hora',16,27);
+ let y=46;doc.setTextColor(90,60,130);doc.setFontSize(10);
+ const cols=[16,62,92,122,152];['Día','Entrada','Salida','Horas','Importe'].forEach((t,i)=>doc.text(t,cols[i],y));
+ doc.setDrawColor(200,180,230);doc.line(16,y+2,194,y+2);y+=9;doc.setTextColor(30,20,45);
+ c.r.ks.forEach(k=>{const x=S.dias[k];if(y>275){doc.addPage();y=20}
+  [dLabel(k)+(isPaid(k)?'  (pagado)':''),x.entrada,x.salida,hDec(minOf(x)),eur(eurOf(x))].forEach((t,i)=>doc.text(String(t),cols[i],y));y+=7});
+ if(!c.r.ks.length){doc.text('No hay días trabajados en este periodo.',16,y);y+=7}
+ y+=4;doc.line(16,y,194,y);y+=9;doc.setFontSize(12);doc.setFont('helvetica','bold');
+ doc.text('Total: '+hDec(c.r.m)+'  ·  '+eur(c.r.e),16,y);y+=8;doc.setFont('helvetica','normal');doc.setFontSize(11);
+ doc.text('Pagado: '+eur(c.r.e-c.r.pe)+'     Pendiente: '+eur(c.r.pe),16,y);
+ const ad=advSum(advOpen(c.b));
+ if(ad>0.005&&c.r.pe>0.005){y+=7;doc.text('Adelantos a descontar: -'+eur(ad)+'     A pagar: '+eur(Math.max(0,c.r.pe-ad)),16,y)}
+ const blob=doc.output('blob'),name='horas-'+c.a+'-a-'+c.b+'.pdf';
+ try{const file=new File([blob],name,{type:'application/pdf'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:name})}
+  else{const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),5000)}
+  m.className='msg';m.textContent='PDF listo.'}
+ catch(e){if(e&&e.name==='AbortError'){m.textContent='';return}m.className='msg err';m.textContent='No se pudo descargar aquí. Usa Copiar resumen o WhatsApp.'}
+});
+
+/* ---------- PAGOS ---------- */
+function renderPagos(){
+ const all=range('0000-00-00','9999-99-99');
+ const ao=advOpen(),aos=advSum(ao);
+ $('pPend').textContent=eur(Math.max(0,all.pe-aos));$('pPendH').textContent=hDec(all.pm)+' sin cobrar'+(aos>0.005?' · ya descontados '+eur(aos)+' de adelantos':'');
+ $('pAdv').textContent=eur(aos);$('pAdvN').textContent=ao.length?ao.length+(ao.length===1?' adelanto':' adelantos'):'ninguno';
+ const al=[...S.adv].sort((a,b)=>(b.fecha+b.id).localeCompare(a.fecha+a.id)).slice(0,30);
+ $('advList').innerHTML=al.length?al.map(a=>'<div class="it"><span>'+eur(+a.importe||0)+'<br><span class="tiny">'+dShort(a.fecha)+(a.nota?' · '+esc(a.nota):'')+'</span></span><span class="r"><span class="tag '+(a.pagoId?'t-ok':'t-pend')+'">'+(a.pagoId?'Descontado':'Sin descontar')+'</span>'+(a.pagoId?'':'<br><button class="mini danger" style="margin-top:6px" data-dela="'+esc(a.id)+'">Quitar</button>')+'</span></div>').join(''):'';
+ const paid=S.pagos.reduce((s,p)=>s+(+p.importe||0),0);$('pPaid').textContent=eur(paid);$('pCount').textContent=S.pagos.length+(S.pagos.length===1?' pago':' pagos');
+ const wk={};Object.keys(S.dias).forEach(k=>{if(done(S.dias[k]))wk[ymd(monday(parse(k)))]=1});
+ const ws=Object.keys(wk).sort().reverse().slice(0,12);
+ $('wkList').innerHTML=ws.length?ws.map(w=>{const z=ymd(addD(parse(w),6)),r=range(w,z),[t,c]=status(r);
+  return '<div class="it"><span>'+dLabel(w)+' – '+dLabel(z)+'<br><span class="tiny">'+hDec(r.m)+' · '+eur(r.e)+'</span></span><span class="r"><span class="tag '+c+'">'+t+'</span>'+(r.pe>=0.005?'<br><button class="mini" style="margin-top:6px" data-payw="'+w+'">Marcar pagada</button>':'')+'</span></div>'}).join(''):'<p class="tiny" style="padding-top:6px">Cuando guardes días, aquí verás cada semana.</p>';
+ const ps=[...S.pagos].sort((a,b)=>(b.fecha+b.id).localeCompare(a.fecha+a.id));
+ $('payList').innerHTML=ps.length?ps.map(p=>'<div class="it"><span>'+eur(+p.importe||0)+'<br><span class="tiny">'+dShort(p.desde)+' – '+dShort(p.hasta)+' · anotado el '+dShort(p.fecha)+(p.adelantos?' · descontados '+eur(+p.adelantos)+' de adelantos':'')+'</span></span><span class="r"><button class="mini danger" data-delp="'+esc(p.id)+'">Quitar</button></span></div>').join(''):'<p class="tiny" style="padding-top:6px">Todavía no hay pagos. Márcalos desde aquí o desde el calendario.</p>';
+}
+$('wkList').addEventListener('click',async e=>{const b=e.target.closest('[data-payw]');if(!b)return;const a=b.dataset.payw,z=ymd(addD(parse(a),6));
+ b.disabled=true;try{await payPeriod(a,z);renderAll()}catch(x){b.disabled=false;b.textContent=x&&x.code==='adv'?'Adelantos > semana':'Error, reintenta'}});
+$('advDate').value=ymd(new Date());
+$('bAdv').addEventListener('click',async()=>{const v=parseFloat(String($('advAmt').value).replace(',','.')),f=$('advDate').value,m=$('mAdv');
+ if(!(v>0)){m.className='msg err';m.textContent='Pon el importe del adelanto.';return}
+ if(!f){m.className='msg err';m.textContent='Pon la fecha.';return}
+ $('bAdv').disabled=true;
+ try{await putAdv({id:'a'+Date.now().toString(36),importe:Math.round(v*100)/100,fecha:f,nota:$('advNote').value.trim().slice(0,60)});
+  m.className='msg';m.textContent='Adelanto apuntado: '+eur(v)+'.';$('advAmt').value='';$('advNote').value='';renderAll()}
+ catch(x){m.className='msg err';m.textContent='No se pudo guardar.'}
+ $('bAdv').disabled=false});
+$('advList').addEventListener('click',async e=>{const b=e.target.closest('[data-dela]');if(!b)return;
+ if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='¿Seguro?';return}
+ try{await delAdv(b.dataset.dela);renderAll()}catch(x){b.textContent='Error'}});
+$('payList').addEventListener('click',async e=>{const b=e.target.closest('[data-delp]');if(!b)return;
+ if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='¿Seguro?';return}
+ try{await delPago(b.dataset.delp);S.pagos=S.pagos.filter(p=>p.id!==b.dataset.delp);renderAll()}catch(x){b.textContent='Error'}});
+
+/* ---------- AJUSTES ---------- */
+function renderCfg(){if(!$('aDays').contains(document.activeElement)){const wd=S.cfg.diasTrabajo||[];$('aDays').innerHTML='LMXJVSD'.split('').map((c,i)=>'<label><input type="checkbox" value="'+i+'"'+(wd.includes(i)?' checked':'')+' aria-label="'+['lunes','martes','miércoles','jueves','viernes','sábado','domingo'][i]+'"><span>'+c+'</span></label>').join('')}
+ if(document.activeElement!==$('aRate'))$('aRate').value=S.cfg.tarifa;if(document.activeElement!==$('aAvIn'))$('aAvIn').value=S.cfg.horaAvisoEntrada;if(document.activeElement!==$('aAvOut'))$('aAvOut').value=S.cfg.horasAvisoSalida;if(document.activeElement!==$('aName'))$('aName').value=S.cfg.nombre;
+ $('hName').textContent=S.cfg.nombre.toUpperCase();$('hAv').textContent=S.cfg.nombre.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase()}
+$('bCfg').addEventListener('click',async()=>{const r=parseFloat(String($('aRate').value).replace(',','.')),n=$('aName').value.trim(),m=$('mCfg');
+ if(!(r>0)){m.className='msg err';m.textContent='Pon un precio por hora mayor que 0.';return}
+ if(!n){m.className='msg err';m.textContent='Pon un nombre.';return}
+ const wd=[...$('aDays').querySelectorAll('input:checked')].map(x=>+x.value);
+ const ai=$('aAvIn').value||'10:00',ao=parseFloat(String($('aAvOut').value).replace(',','.'));
+ if(!(ao>=1&&ao<=16)){m.className='msg err';m.textContent='Las horas del aviso de salida tienen que estar entre 1 y 16.';return}
+ try{await putCfg({tarifa:Math.round(r*100)/100,nombre:n,diasTrabajo:wd,horaAvisoEntrada:ai,horasAvisoSalida:ao});m.className='msg';m.textContent='Ajustes guardados.';renderAll()}catch(e){m.className='msg err';m.textContent='No se pudieron guardar.'}});
+
+/* ---------- ROUTING ---------- */
+const VIEWS=['hoy','calendario','pagos','ajustes'];
+function route(){const v=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):'hoy';
+ VIEWS.forEach(x=>$('v-'+x).classList.toggle('on',x===v));
+ document.querySelectorAll('.nav a').forEach(a=>{a.classList.toggle('on',a.dataset.v===v);a.setAttribute('aria-current',a.dataset.v===v?'page':'false')});
+ if(v==='hoy')drawChart();window.scrollTo(0,0)}
+window.addEventListener('hashchange',route);
+
+function renderAll(){renderCfg();renderClock();renderAlerts();renderHoy();renderCal();renderRange();renderPagos()}
+
+/* ---------- INIT ---------- */
+const t=new Date();$('fDate').value=ymd(t);
+$('rFrom').value=ymd(new Date(t.getFullYear(),t.getMonth(),1));$('rTo').value=ymd(new Date(t.getFullYear(),t.getMonth()+1,0));
+route();renderAll();
+
+/* ---------- FIREBASE: base de datos ---------- */
+function refD(path){const r=doc(fs,path);return{
+ set:v=>setDoc(r,v),delete:()=>deleteDoc(r),
+ onSnapshot:(next,err)=>onSnapshot(r,{includeMetadataChanges:true},x=>next({exists:x.exists(),data:()=>x.data(),metadata:x.metadata}),err)}}
+db={
+ doc:refD,
+ collection:n=>({doc:id=>refD(n+'/'+id),
+  onSnapshot:(next,err)=>onSnapshot(collection(fs,n),{includeMetadataChanges:true},q=>next({docs:q.docs.map(d=>({id:d.id,data:()=>d.data()})),metadata:q.metadata}),err)})
+};
+const isAdminUser=u=>!!u&&(u.email||'').toLowerCase()===ADMIN_EMAIL;
+let unsubs=[];
+function stopAll(){unsubs.forEach(f=>{try{f()}catch(e){}});unsubs=[]}
+
+function startData(){
+ const s=$('sync');let got=0;
+ const timer=setTimeout(()=>{s.hidden=false;s.textContent='Conectando… Si tarda, revisa la conexión a internet.'},10000);
+ const ready=()=>{if(++got>=4){clearTimeout(timer);s.hidden=true}};
+ const first={d:1,p:1,c:1,a:1};
+ const err=()=>{clearTimeout(timer);s.hidden=false;s.textContent='No se pudo leer los datos. Cierra y vuelve a abrir la app.'};
+ unsubs.push(db.collection('dias').onSnapshot(q=>{const o={};q.docs.forEach(d=>{const v=d.data();if(v&&(v.entrada||v.libre))o[d.id]=v});S.dias=o;if(first.d&&!q.metadata.fromCache){first.d=0;ready()}fillFormIfIdle();renderAll()},err));
+ unsubs.push(db.collection('pagos').onSnapshot(q=>{S.pagos=q.docs.map(d=>d.data()).filter(p=>p&&p.desde&&p.hasta);if(first.p&&!q.metadata.fromCache){first.p=0;ready()}renderAll()},err));
+ unsubs.push(db.doc('config/ajustes').onSnapshot(d=>{if(d.exists){const v=d.data();S.cfg=Object.assign({},DEF_CFG,v,{tarifa:+v.tarifa||8,diasTrabajo:Array.isArray(v.diasTrabajo)?v.diasTrabajo.map(Number):DEF_CFG.diasTrabajo,horasAvisoSalida:+v.horasAvisoSalida||9})}if(first.c&&!d.metadata.fromCache){first.c=0;ready()}renderAll()},err));
+ unsubs.push(db.collection('adelantos').onSnapshot(q=>{S.adv=q.docs.map(d=>d.data()).filter(a=>a&&a.id&&a.fecha);if(first.a&&!q.metadata.fromCache){first.a=0;ready()}renderAll()},err));
+ if(isAdminUser(ME)){
+  $('usersCard').hidden=false;
+  unsubs.push(onSnapshot(collection(fs,'usuarios'),q=>{S.users=q.docs.map(d=>Object.assign({uid:d.id},d.data()));renderUsers()},()=>{}));
+ }
+ $('usersCard').hidden=!isAdminUser(ME);
+ $('whoami').textContent='Has entrado como '+ME.email+(isAdminUser(ME)?' (administrador)':'')+'.';
+ renderPush();
+}
+
+/* ---------- USUARIOS (solo admin) ---------- */
+function renderUsers(){
+ const l=S.users.filter(u=>(u.email||'').toLowerCase()!==ADMIN_EMAIL).sort((a,b)=>(a.estado==='pendiente'?0:1)-(b.estado==='pendiente'?0:1));
+ const lbl={pendiente:['Esperando','t-par'],aprobado:['Aprobado','t-ok'],bloqueado:['Bloqueado','t-pend']};
+ $('usersList').innerHTML=l.length?l.map(u=>{const t=lbl[u.estado]||lbl.pendiente;
+  return '<div class="it"><span>'+esc(u.nombre||'Sin nombre')+'<br><span class="tiny">'+esc(u.email||'')+'</span></span><span class="r"><span class="tag '+t[1]+'">'+t[0]+'</span><br>'+
+  (u.estado!=='aprobado'?'<button class="mini" style="margin-top:6px" data-ust="aprobado" data-uid="'+esc(u.uid)+'">Aprobar</button>':'<button class="mini danger" style="margin-top:6px" data-ust="bloqueado" data-uid="'+esc(u.uid)+'">Bloquear</button>')+'</span></div>'}).join(''):'<p class="tiny" style="padding-top:6px">Cuando Ana Paola se registre, aparecerá aquí para aprobarla.</p>';
+}
+$('usersList').addEventListener('click',async e=>{const b=e.target.closest('[data-ust]');if(!b)return;b.disabled=true;
+ try{await updateDoc(doc(fs,'usuarios',b.dataset.uid),{estado:b.dataset.ust})}catch(x){b.disabled=false;b.textContent='Error'}});
+
+/* ---------- NOTIFICACIONES ---------- */
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+const standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+async function pushSupported(){try{return VAPID_KEY&&'serviceWorker' in navigator&&'Notification' in window&&await isSupported()}catch(e){return false}}
+async function renderPush(){
+ const info=$('pushInfo'),b=$('bPush');
+ if(!VAPID_KEY){info.textContent='Las notificaciones se activarán muy pronto.';b.hidden=true;return}
+ if(isIOS&&!standalone){info.textContent='En iPhone: abre esta página en Safari, pulsa Compartir y luego «Añadir a pantalla de inicio». Abre la app desde ese icono y activa aquí las notificaciones.';b.hidden=true;return}
+ if(!await pushSupported()){info.textContent='Este navegador no admite notificaciones.';b.hidden=true;return}
+ b.hidden=false;
+ if(Notification.permission==='granted'){info.textContent='Notificaciones activadas en este móvil.';b.textContent='Volver a registrar este móvil'}
+ else if(Notification.permission==='denied'){info.textContent='Las notificaciones están bloqueadas. Actívalas en los ajustes del móvil para esta app.';b.hidden=true}
+ else info.textContent='Recibirás recordatorios para fichar, el resumen de la semana y los avisos de pago.';
+}
+$('bPush').addEventListener('click',async()=>{const m=$('mPush');m.className='msg';m.textContent='Activando…';
+ try{
+  const perm=await Notification.requestPermission();
+  if(perm!=='granted'){m.className='msg err';m.textContent='No se dio permiso para las notificaciones.';renderPush();return}
+  const reg=await navigator.serviceWorker.register('firebase-messaging-sw.js');
+  await navigator.serviceWorker.ready;
+  const token=await getToken(getMessaging(fbApp),{vapidKey:VAPID_KEY,serviceWorkerRegistration:reg});
+  if(!token)throw new Error('sin token');
+  await updateDoc(doc(fs,'usuarios',ME.uid),{tokens:arrayUnion(token)});
+  m.textContent='Listo. Este móvil recibirá las notificaciones.';renderPush();
+ }catch(e){m.className='msg err';m.textContent='No se pudieron activar. Inténtalo otra vez.'}
+});
+$('bOut').addEventListener('click',async()=>{stopAll();await signOut(auth)});
+
+/* ---------- ACCESO ---------- */
+const gate=$('gateBody');
+let gateMode='entrar';
+function lock(html){document.body.classList.add('locked');gate.innerHTML=html}
+function showLogin(msg){
+ const reg=gateMode==='registro';
+ lock('<h1>'+(reg?'Crea tu cuenta':'Bienvenida')+'</h1><p>'+(reg?'Regístrate con tu correo. Después César aprobará tu acceso.':'Entra con tu correo y tu contraseña.')+'</p>'+
+ '<div class="glass card"><div class="tabs"><button class="mini '+(reg?'':'on')+'" data-gm="entrar">Entrar</button><button class="mini '+(reg?'on':'')+'" data-gm="registro">Crear cuenta</button></div>'+
+ '<form id="fAuth" novalidate>'+(reg?'<div class="field"><label for="gName">Tu nombre</label><input id="gName" autocomplete="name" maxlength="40"></div>':'')+
+ '<div class="field"><label for="gMail">Correo</label><input id="gMail" type="email" autocomplete="email" inputmode="email"></div>'+
+ '<div class="field"><label for="gPass">Contraseña</label><input id="gPass" type="password" autocomplete="'+(reg?'new-password':'current-password')+'"></div>'+
+ '<div style="margin-top:14px"><button class="pri" type="submit">'+(reg?'Crear cuenta':'Entrar')+'</button></div></form>'+
+ (reg?'':'<div style="margin-top:8px;text-align:center"><button class="link" id="gForgot">He olvidado mi contraseña</button></div>')+
+ '<div class="msg '+(msg&&msg.err?'err':'')+'" id="gMsg" role="status">'+(msg?esc(msg.t):'')+'</div></div>');
+ gate.querySelectorAll('[data-gm]').forEach(b=>b.onclick=()=>{gateMode=b.dataset.gm;showLogin()});
+ const f=$('fAuth');
+ f.onsubmit=async e=>{e.preventDefault();const m=$('gMsg'),mail=$('gMail').value.trim(),pw=$('gPass').value;m.className='msg';
+  if(!mail){m.className='msg err';m.textContent='Escribe tu correo.';return}
+  if(pw.length<6){m.className='msg err';m.textContent='La contraseña tiene que tener al menos 6 caracteres.';return}
+  if(reg&&!$('gName').value.trim()){m.className='msg err';m.textContent='Escribe tu nombre.';return}
+  m.textContent='Un momento…';
+  try{
+   if(reg){const c=await createUserWithEmailAndPassword(auth,mail,pw);await updateProfile(c.user,{displayName:$('gName').value.trim()});try{await sendEmailVerification(c.user)}catch(x){}await ensureUserDoc(c.user)}
+   else await signInWithEmailAndPassword(auth,mail,pw);
+  }catch(x){m.className='msg err';m.textContent=authErr(x)}
+ };
+ const fg=$('gForgot');if(fg)fg.onclick=async()=>{const m=$('gMsg'),mail=$('gMail').value.trim();
+  if(!mail){m.className='msg err';m.textContent='Escribe tu correo arriba y vuelve a pulsar.';return}
+  try{await sendPasswordResetEmail(auth,mail);m.className='msg';m.textContent='Te hemos enviado un correo para cambiar la contraseña.'}catch(x){m.className='msg err';m.textContent=authErr(x)}};
+}
+function authErr(x){const c=(x&&x.code)||'';
+ if(c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found'))return'Correo o contraseña incorrectos.';
+ if(c.includes('email-already-in-use'))return'Ese correo ya tiene cuenta. Pulsa «Entrar».';
+ if(c.includes('invalid-email'))return'Ese correo no es válido.';
+ if(c.includes('weak-password'))return'La contraseña es muy corta. Usa al menos 6 caracteres.';
+ if(c.includes('too-many-requests'))return'Demasiados intentos. Espera unos minutos.';
+ if(c.includes('network'))return'Sin conexión. Revisa internet.';
+ return'No se pudo completar. Inténtalo otra vez.'}
+async function ensureUserDoc(u){
+ const r=doc(fs,'usuarios',u.uid);
+ const x=await getDoc(r);
+ if(!x.exists())await setDoc(r,{email:u.email,nombre:u.displayName||'',estado:'pendiente',tokens:[],creado:new Date().toISOString()});
+}
+function showVerify(u){
+ lock('<h1>Verifica tu correo</h1><p>Como administrador, primero confirma tu correo. Te hemos enviado un enlace a '+esc(u.email)+'. Ábrelo y vuelve aquí.</p>'+
+ '<div class="glass card"><button class="pri" id="gDone">Ya lo he verificado</button><div style="margin-top:8px" class="grid2"><button id="gResend">Reenviar correo</button><button id="gOut2">Salir</button></div><div class="msg" id="gMsg" role="status"></div></div>');
+ $('gDone').onclick=async()=>{await u.reload();await u.getIdToken(true);if(auth.currentUser.emailVerified)boot(auth.currentUser);else{$('gMsg').className='msg err';$('gMsg').textContent='Todavía no aparece verificado. Abre el enlace del correo (mira también en spam).'}};
+ $('gResend').onclick=async()=>{try{await sendEmailVerification(u);$('gMsg').className='msg';$('gMsg').textContent='Correo reenviado.'}catch(x){$('gMsg').className='msg err';$('gMsg').textContent=authErr(x)}};
+ $('gOut2').onclick=()=>signOut(auth);
+}
+function showWaiting(st){
+ lock('<h1>'+(st==='bloqueado'?'Acceso bloqueado':'Esperando aprobación')+'</h1><p>'+(st==='bloqueado'?'Tu acceso a la app está bloqueado. Habla con César.':'Tu cuenta está creada. Cuando César la apruebe, esta pantalla se abrirá sola.')+'</p>'+
+ '<div class="glass card"><button id="gOut3" style="width:100%">Cerrar sesión</button></div>');
+ $('gOut3').onclick=()=>{stopAll();signOut(auth)};
+}
+async function boot(u){
+ ME=u;
+ if(isAdminUser(u)){
+  if(!u.emailVerified){showVerify(u);return}
+  try{await ensureUserDoc(u);const r=doc(fs,'usuarios',u.uid);const x=await getDoc(r);if(x.exists()&&x.data().estado!=='aprobado')await updateDoc(r,{estado:'aprobado'})}catch(e){}
+  document.body.classList.remove('locked');startData();return;
+ }
+ try{await ensureUserDoc(u)}catch(e){}
+ let started=false;
+ unsubs.push(onSnapshot(doc(fs,'usuarios',u.uid),x=>{
+  const st=x.exists()?x.data().estado:'pendiente';
+  if(st==='aprobado'){if(!started){started=true;document.body.classList.remove('locked');startData()}}
+  else{if(started){started=false;stopAll();location.reload()}else showWaiting(st)}
+ },()=>showWaiting('pendiente')));
+}
+onAuthStateChanged(auth,u=>{stopAll();S.dias={};S.pagos=[];S.adv=[];S.users=[];if(u)boot(u);else{gateMode='entrar';showLogin()}});
+if('serviceWorker' in navigator&&VAPID_KEY)navigator.serviceWorker.register('firebase-messaging-sw.js').catch(()=>{});
+function fillFormIfIdle(){const a=document.activeElement;if(a!==$('fIn')&&a!==$('fOut'))fillForm()}
+}
+</script>
+</body>
+</html>

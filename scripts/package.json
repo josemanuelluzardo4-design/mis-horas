@@ -1,0 +1,5 @@
+{
+  "name": "mis-horas-avisos",
+  "private": true,
+  "dependencies": { "firebase-admin": "^12.7.0" }
+}
