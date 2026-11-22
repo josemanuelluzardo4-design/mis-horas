@@ -138,6 +138,29 @@ button:active{transform:scale(.98)}
 body.locked .app,body.locked .nav{display:none}
 body:not(.locked) .gate{display:none}
 .nav{bottom:calc(12px + env(safe-area-inset-bottom))}
+@media (min-width:900px){
+ .app{max-width:1240px;padding:0 32px 130px}
+ header{padding-top:28px}
+ .view.on{column-count:2;column-gap:20px}
+ #v-hoy.on{column-count:1}
+ .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:20px;align-items:start}
+ .col>*:first-child,.col>#alerts:empty+*{margin-top:0!important}
+ .view>.hero{min-height:150px!important}
+ .view>*{break-inside:avoid;margin-top:0!important;margin-bottom:20px}
+ .view>.hero{column-span:all;min-height:170px}
+ .view>#alerts:empty{display:none}
+ .hero h1{font-size:46px;max-width:none}
+ .hero p{max-width:none}
+ .orb{width:240px;height:240px;right:0}
+ .cal{gap:6px}
+ .cal button{min-height:58px;font-size:15px}
+ .fig{height:160px}
+ .nav{width:520px}
+ .gate{max-width:460px}
+}
+@media (min-width:1400px){
+ #v-pagos.on,#v-ajustes.on{column-count:3}
+}
 @media (prefers-reduced-motion:no-preference){.orb{animation:fl 7s ease-in-out infinite}@keyframes fl{50%{transform:translateY(8px)}}}
 </style>
 </head>
@@ -163,6 +186,7 @@ body:not(.locked) .gate{display:none}
    <p id="heroDate">Controla lo que trabajas y lo que ganas, día a día.</p>
   </div>
 
+  <div class="cols"><div class="col">
   <div id="alerts"></div>
   <div class="glass card clock" id="clock"></div>
 
@@ -194,6 +218,7 @@ body:not(.locked) .gate{display:none}
    <div class="between" style="margin-top:8px"><div class="msg" id="mSave" role="status"></div><button class="mini danger" id="bDel" hidden>Borrar día</button></div>
   </div>
 
+  </div><div class="col">
   <div class="grid2" style="margin-top:12px">
    <div class="glass stat"><small id="wLbl">Esta semana</small><b id="wH">0 h</b><span class="eur" id="wE">0,00 €</span><br><span class="tag t-none" id="wS">Sin horas</span></div>
    <div class="glass stat"><small id="mLbl">Este mes</small><b id="mH">0 h</b><span class="eur" id="mE">0,00 €</span><br><span class="tag t-none" id="mS">Sin horas</span></div>
@@ -208,6 +233,7 @@ body:not(.locked) .gate{display:none}
    <div class="days" id="cDays"></div>
    <div class="list" id="wList"></div>
   </div>
+   </div></div>
  </section>
 
  <!-- CALENDARIO -->
